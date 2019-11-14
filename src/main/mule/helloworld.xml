@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f7eb9a30-da7c-476d-8c16-2b561f20aff0" basePath="/" >
+		<http:listener-connection host="0.0.0.0" port="8200" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="31ac02ec-4c98-41fd-9dda-82282cd4e04c">
+		<http:listener-connection host="0.0.0.0" port="8889" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="61738dff-8e85-4020-ab02-0e2c7ba22161" >
+		<http:request-connection host="dummy.restapiexample.com" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="7d853990-7f85-465b-bbba-e262a7649f4b" >
+		<http:request-connection host="dummy.restapiexample.com" />
+	</http:request-config>
+	<flow name="GetFlow" doc:id="d97c2caa-4722-41fe-96aa-282f11e46c48" >
+		<http:listener doc:name="Get Hello" doc:id="8a8195c7-d765-4e34-96ec-09984bd641a8" config-ref="HTTP_Listener_config1" path="/hello" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="Get Flow accepted" doc:id="509a3913-56ec-414c-972a-e000f3e9e07a" message='"Get  flow invoked"'/>
+		<set-payload value='"Reuested Accepted"' doc:name="Set Payload" doc:id="326f509c-7795-4286-9cb0-ec7025a8baa4" />
+	</flow>
+	<flow name="PostFlow" doc:id="4edd68f8-439d-4bae-b83b-b297b80f46ec" >
+		<http:listener doc:name="Post Call" doc:id="19428645-7159-4821-9231-8fcfbff5d33e" config-ref="HTTP_Listener_config1" path="/hello" allowedMethods="POST" />
+		<logger level="INFO" doc:name="POST CALL " doc:id="b3f814b9-b898-4451-b9bb-53b2149c6015" message='"POST  flow invoked"' />
+		<set-payload value='"Requested Accepted"' doc:name="Payload" doc:id="8f16cc94-4d1c-4650-9cca-547658fa7537" />
+	</flow>
+	<flow name="RestGETFlow" doc:id="307bf222-6838-451f-973a-03f178b43f76" >
+		<http:listener doc:name="Get host listener" doc:id="ae44ed82-1aa3-4d00-9ada-0011d87abaec" config-ref="HTTP_Listener_config1" path="/hello1" allowedMethods="GET" />
+		<http:request method="GET" doc:name="Req REST WS" doc:id="a40aea60-b951-4b27-ae4a-da630cac4207" config-ref="HTTP_Request_configuration" path="/api/v1/employees"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="bd1ca14e-99d9-4063-9874-de5f01fe7e20" />
+	</flow>
+	<flow name="RestPOSTFlow" doc:id="59cfa9f2-175c-4ccc-b200-0f9e201275fd" >
+		<http:listener doc:name="REST POST Listener" doc:id="91df086a-fa10-4883-ba45-b319246255cd" config-ref="HTTP_Listener_config1" path="/hello2" allowedMethods="POST" />
+		<http:request method="POST" doc:name="POST REST WS" doc:id="25c69083-5f6c-42f6-9c25-ceba19ef096e" config-ref="HTTP_Request_configuration1" path="/api/v1/create" />
+	</flow>
+</mule>
